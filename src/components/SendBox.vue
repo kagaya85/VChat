@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "inputBox",
+  name: "sendBox",
   data() {
     return {
       textarea: "",
@@ -36,7 +36,5 @@ export default {
 </script>
 
 <style scoped>
-el-input {
-  resize: none;
-}
+
 </style>

@@ -11,12 +11,11 @@
       </el-aside>
       <el-container>
         <el-header>title</el-header>
-        <el-main>
-
+        <el-main class="msg-win">
+          <Message>test</Message>
+          <Message>test1234</Message>
         </el-main>
-        <el-main>
-          <InputBox></InputBox>
-        </el-main>
+        <SendBox></SendBox>
       </el-container>
     </el-container>
   </div>
@@ -26,7 +25,7 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld'
 import UserItem from '@/components/UserItem'
-import InputBox from '@/components/InputBox'
+import SendBox from '@/components/SendBox'
 import Message from '@/components/Message'
 
 export default {
@@ -34,12 +33,16 @@ export default {
   components: {
     // HelloWorld,
     UserItem,
-    InputBox,
+    SendBox,
     Message
   }
 }
 </script>
 
 <style scoped>
+.msg-win {
+  background-color: #f2f2f2;
+  height: 800px;
+}
 
 </style>
