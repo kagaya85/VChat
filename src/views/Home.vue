@@ -24,7 +24,7 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld'
+// import HelloWorld from '@/components/HelloWorld'
 import UserItem from '@/components/UserItem'
 import InputBox from '@/components/InputBox'
 import Message from '@/components/Message'
