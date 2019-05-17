@@ -1,5 +1,6 @@
 <template>
   <div :class="['message', isMe ? 'is-me' : 'not-me']">
+    <div v-if="!isMe" class="username">{{username}}</div>
     <div class="bubble">
       <slot></slot>
     </div>
@@ -20,6 +21,13 @@ export default {
 <style scoped>
 .message {
   margin: 0px 8px 20px 8px;
+}
+
+.username {
+  /* display: inline; */
+  margin-left: 5px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .bubble{

@@ -5,6 +5,7 @@ const en = {
   "send": "Send",
   "messagePlaceholder": "Please input something...",
   "chatRoom": "Chat Room",
+  "welcome": "Welcome",
   ...enLocale
 }
 

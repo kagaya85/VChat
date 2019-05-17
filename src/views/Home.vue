@@ -14,7 +14,7 @@
         <el-main>
           <el-scrollbar style="" :native="false" wrapStyle="overflow-x: hidden;" :noresize="false" tag="div">
             <div class="msg-win">
-              <Message v-for="(msg, index) in msgList[selectIndex]" :key="index" :isMe='msg.isMe'>{{msg.content}}</Message>
+              <Message v-for="(msg, index) in msgList[selectIndex]" :key="index" :isMe="msg.username == $store.state.username" :username="msg.username">{{msg.content}}</Message>
             </div>
           </el-scrollbar>
           <SendBox class="send-box" @send='sendMsg'></SendBox>
@@ -41,9 +41,9 @@ export default {
     return {
       msgList: [
         [
-          {isMe: true, content: 'hi this is me'},
-          {isMe: false, content: 'hi this is Tim'},
-          {isMe: false, content: 'hi this is Jack'},
+          {username: 'kagaya', content: 'hi this is me'},
+          {username: 'Tim', content: 'hi this is Tim'},
+          {username: 'Jack', content: 'hi this is Jack'},
         ]
       ],
       usrList: [

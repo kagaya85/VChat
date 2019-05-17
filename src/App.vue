@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>
-        <h1>VChat</h1>
+      <el-header class="app-header">
+        <h1 class="vchat">VChat</h1>
+        <b v-if="isLogin">{{$t('welcome')}}, {{username}}!</b>
       </el-header>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -15,7 +16,29 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'app',
+  computed: {
+    isLogin: function() {
+      return this.$store.state.uid >= 0;
+    },
+    username: function() {
+      return this.$store.state.username;
+    }
+  }
+}
+</script>
+
 <style>
+.vchat {
+  margin: 15px 0px 0px 0px
+}
+
+.app-header {
+  margin-bottom: 10px;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
