@@ -1,10 +1,17 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <el-container>
+      <el-header>
+        <h1>VChat</h1>
+      </el-header>
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    </div> -->
+      <router-view/>
+      <!-- <el-footer>
+      </el-footer> -->
+    </el-container>
   </div>
 </template>
 

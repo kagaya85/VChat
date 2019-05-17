@@ -10,7 +10,8 @@
 export default {
   name: "message",
   props: {
-    isMe: Boolean
+    isMe: Boolean,
+    username: String
   }
 };
 </script>

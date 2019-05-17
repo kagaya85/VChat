@@ -5,9 +5,10 @@
       :rows="5"
       :placeholder="$t('messagePlaceholder')"
       v-model.trim="textarea"
+      @keyup.enter.native="sendClicked"
     ></el-input>
     <div class="input-bar">
-      <div>
+      <div class="char-count">
         <span>{{textarea.length}}</span>
         /
         <span>{{maxlen}}</span>
@@ -43,5 +44,13 @@ export default {
 </script>
 
 <style scoped>
+.char-count {
+  display: inline;
+  margin-right: 10px;
+}
 
+.input-bar {
+  margin-top: 10px;
+  text-align: right;
+}
 </style>
