@@ -2,8 +2,8 @@ module.exports = {
   publicPath: './',
 
   devServer: {
-      port: 2333
-    },
+    port: 2333
+  },
 
   pluginOptions: {
     i18n: {
@@ -12,5 +12,20 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: true
     }
-  }
+  },
+
+  // configureWebpack:{
+  //   module: {
+  //     rules:[
+  //       {
+  //         test:/\.(woff2?|eot|ttf|otf)(\?.*)$/,
+  //         loader:'url-loader',
+  //         options:{
+  //           limit: 10000,
+  //           // name: utils.assetsPath('fonrs/[name].[hash:7].[ext]')
+  //         }
+  //       }
+  //     ]
+  //   }
+  // }
 }

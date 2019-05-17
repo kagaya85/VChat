@@ -6,13 +6,10 @@
       :placeholder="$t('messagePlaceholder')"
       v-model.trim="textarea"
       @keyup.enter.native="sendClicked"
+      maxlength="500"
+      show-word-limit
     ></el-input>
     <div class="input-bar">
-      <div class="char-count">
-        <span>{{textarea.length}}</span>
-        /
-        <span>{{maxlen}}</span>
-      </div>
       <el-button type="primary" @click="sendClicked">{{$t('send')}}</el-button>
     </div>
   </div>
@@ -24,14 +21,13 @@ export default {
   data() {
     return {
       textarea: "",
-      maxlen: 500
     };
   },
-  watch: {
-    textarea: function() {
-      this.textarea = this.textarea.substring(0, this.maxlen);
-    }
-  },
+  // watch: {
+  //   textarea: function() {
+  //     this.textarea = this.textarea.substring(0, this.maxlen);
+  //   }
+  // },
   methods: {
     sendClicked: function() {
       if(this.textarea.length == 0)

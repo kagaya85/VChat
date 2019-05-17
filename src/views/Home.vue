@@ -3,7 +3,7 @@
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <el-container>
-      <el-menu class="user-list" @select='selected'>
+      <el-menu class="user-list" default-active='0' @select='selected'>
         <el-menu-item index="0">{{$t('chatRoom')}}</el-menu-item>
         <el-menu-item v-for="(user, index) in usrList" :index="user.id.toString()" :key="index + 1">{{user.name}}</el-menu-item>
       </el-menu>
@@ -58,7 +58,7 @@ export default {
     sendMsg: function(message) {
       if(this.msgList[this.selectIndex] == null)
         this.msgList[this.selectIndex] = [];
-      this.msgList[this.selectIndex].push({isMe: true, content: message});
+      this.msgList[this.selectIndex].push({username: this.$store.state.username, content: message});
       this.$set(this.msgList, this.selectIndex, this.msgList[this.selectIndex]);  // 这样赋值才能实时响应变化
     },
     selected: function(index, path) {
