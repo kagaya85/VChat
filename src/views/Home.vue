@@ -12,10 +12,9 @@
       <el-container>
         <el-header>title</el-header>
         <el-main class="msg-win">
-          <Message>test</Message>
-          <Message>test1234</Message>
+          <Message v-for="(msg, index) in msgList" :key="index" :isMe='msg.isMe'>{{msg.content}}</Message>
         </el-main>
-        <SendBox></SendBox>
+        <SendBox @send='sendMsg'></SendBox>
       </el-container>
     </el-container>
   </div>
@@ -35,14 +34,28 @@ export default {
     UserItem,
     SendBox,
     Message
-  }
+  },
+  data() {
+    return {
+      msgList: [
+        {isMe: true, content: 'hi this is me'},
+        {isMe: false, content: 'hi this is Tim'},
+        {isMe: false, content: 'hi this is Jack'},
+      ]
+    }
+  },
+  methods: {
+    sendMsg: function(message) {
+      this.msgList.push({isMe: true, content: message});
+    }
+  },
 }
 </script>
 
 <style scoped>
 .msg-win {
   background-color: #f2f2f2;
-  height: 800px;
+  height: 600px;
 }
 
 </style>

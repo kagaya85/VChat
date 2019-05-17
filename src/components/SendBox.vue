@@ -12,7 +12,7 @@
         /
         <span>{{maxlen}}</span>
       </div>
-      <el-button type="primary">{{$t('send')}}</el-button>
+      <el-button type="primary" @click="sendClicked">{{$t('send')}}</el-button>
     </div>
   </div>
 </template>
@@ -31,7 +31,14 @@ export default {
       this.textarea = this.textarea.substring(0, this.maxlen);
     }
   },
-  methods: {}
+  methods: {
+    sendClicked: function() {
+      if(this.textarea.length == 0)
+        return;
+      this.$emit('send', this.textarea);
+      this.textarea = "";
+    }
+  }
 };
 </script>
 
