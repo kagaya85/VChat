@@ -23,7 +23,16 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">{{ $t("login") }}</el-button>
+          <el-button
+            type="primary"
+            class="wide-btn"
+            :loading="false"
+            @click="login"
+            >{{ $t("login") }}</el-button
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-button class="wide-btn">{{ $t("register") }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -48,13 +57,20 @@
 
 .login-form {
   padding: 50px;
+  min-width: 230px;
   border: 1px solid #eee;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
+
+.wide-btn {
+  width: 100%;
+}
 </style>
 
 <script>
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 export default {
   name: "login",
   data() {
@@ -64,6 +80,57 @@ export default {
     };
   },
   components: {},
-  methods: {}
+  methods: {
+    login: function() {
+      if (this.username == "") {
+        this.$message({
+          message: this.$t('plsInputUsername') + '!',
+          type: "warning"
+        });
+        return;
+      }
+      else if (this.password == "") {
+        this.$message({
+          message: this.$t('plsInputPassword') + '!',
+          type: "warning"
+        });
+        return;
+      }
+
+      // axios 异步请求
+      this.axios.post("/login",{
+        username: this.username,
+        password: this.password
+      }
+      ,{
+        headers: {
+          "Content-Type":"application/json;charset=utf-8"
+        }
+      })
+      .then(res => {
+        console.log(res)
+        if(res.status == 200) {
+          // 登陆成功
+          this.$store.commit('login', res.data.username, res.data.uid)
+          // 消息提示
+          this.$message({
+          message: this.$t('welcome') + '!',
+          type: "success"
+          });
+          // 1.5s后跳转跳转页面
+          wait(1500).then(() => {
+            this.$router.push('/')
+          })
+        }
+        else {  // 404
+          // 登陆失败
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    }
+  }
 };
 </script>

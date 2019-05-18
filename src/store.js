@@ -5,8 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    username: "kagaya",
-    uid: 0
+    username: "",
+    uid: '0',
+    token: null
   },
   mutations: {
     login: function(state, name, uid) {
@@ -15,7 +16,7 @@ export default new Vuex.Store({
     },
     logout: function(state) {
       state.username = ""
-      state.uid = -1
+      state.uid = '0'
     }
   },
   actions: {

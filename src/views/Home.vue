@@ -61,7 +61,7 @@ export default {
       this.msgList[this.selectIndex].push({username: this.$store.state.username, content: message});
       this.$set(this.msgList, this.selectIndex, this.msgList[this.selectIndex]);  // 这样赋值才能实时响应变化
     },
-    selected: function(index, path) {
+    selected: function(index) {
       this.selectIndex = index;
     }
   },
