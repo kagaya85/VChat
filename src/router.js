@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-// import store from './store';
+import store from './store';
 
 Vue.use(Router)
 
@@ -34,15 +34,18 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   if(to.meta.requireAuth) {
-//     if (store.stste.token) {
-//       next()
-//     }
-//     else {
-//       next('/login')  // 跳转到登陆
-//     }
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if(to.meta.requireAuth) {
+    if (store.state.token) {
+      next()
+    }
+    else {
+      next('/login')  // 跳转到登陆
+    }
+  }
+  else {
+    next()  // 这里一定要加next转移操作权
+  }
+})
 
 export default router

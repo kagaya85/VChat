@@ -32,7 +32,8 @@ app.post('/login', (req, res) => {
   if(req.body.username == 'kagaya' && req.body.password == '123') {
     res.status(200).json({
       username: 'kagaya',
-      uid: '1'
+      uid: '1',
+      token: 'xxxxxxxxxx'
     })
   }
   else {

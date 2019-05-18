@@ -21,7 +21,7 @@ export default {
   name: 'app',
   computed: {
     isLogin: function() {
-      return this.$store.state.uid != 0;
+      return this.$store.state.uid;
     },
     username: function() {
       return this.$store.state.username;

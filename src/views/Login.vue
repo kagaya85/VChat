@@ -111,7 +111,7 @@ export default {
         console.log(res)
         if(res.status == 200) {
           // 登陆成功
-          this.$store.commit('login', res.data.username, res.data.uid)
+          this.$store.commit('login', res.data)
           // 消息提示
           this.$message({
           message: this.$t('welcome') + '!',

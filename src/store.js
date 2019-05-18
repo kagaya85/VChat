@@ -5,18 +5,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    username: "",
-    uid: '0',
-    token: null
+    username: '',
+    uid: '',
+    token: ''
   },
   mutations: {
-    login: function(state, name, uid) {
-      state.username = name
-      state.uid = uid
+    login: function(state, info) {
+      state.username = info.username
+      state.uid = info.uid
+      state.token = info.token
     },
     logout: function(state) {
-      state.username = ""
-      state.uid = '0'
+      state.username = ''
+      state.uid = ''
+      state.token = ''
     }
   },
   actions: {
