@@ -103,12 +103,12 @@ io.sockets.on('connection', function (socket) {
       socket.broadcast.emit('say', data)
     } else {
       //向特定用户发送该用户发话信息
-      for(let socket in io.sockets.connected) {
+      for(let key in io.sockets.connected) {
         //遍历找到该用户
-        if(socket.username == data.to) {
+        if(io.sockets.connected[key].username == data.to) {
           //触发该用户客户端的 say 事件
           console.log('[Say] send to ', data.to, data.content)
-          socket.emit('say', data)
+          io.sockets.connected[key].emit('say', data)
         }
       }
     }
@@ -116,7 +116,7 @@ io.sockets.on('connection', function (socket) {
 
   //有人下线(断开连接)
   socket.on('disconnect', function() {
-    console.log('[Offline] ' + socket.name)
+    console.log('[Offline] ' + socket.username)
 
     for(let i = 0; i < onlineList.length; i++) {
       if (socket.username == onlineList[i].username && socket.uid == onlineList[i].uid) {

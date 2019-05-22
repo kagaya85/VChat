@@ -136,7 +136,7 @@ export default {
         }
       }
     })
-    // 发言事件
+    // 发言
     this.socket.on('say', (data) => {
       console.log('Get message from ' + data.from)
       let username
@@ -145,7 +145,7 @@ export default {
       }
       else if(!this.msgList[data.from]) {
         username = data.from
-        this.msgList[username] = []
+        this.$set(this.msgList, username, [])
       }
 
       this.msgList[username].push({username: data.from, content: data.content})
@@ -161,15 +161,15 @@ export default {
       let toUsername = this.userList[this.selectIndex].username
       console.log('Send message to ' + toUsername)
       if (!this.msgList[toUsername]) {
-        this.msgList[toUsername] = []
+        this.$set(this.msgList, toUsername, [])
       }
 
       this.msgList[toUsername].push({
         username: this.$store.state.username,
         content: message
-      });
+      })
 
-      this.$set(this.msgList, toUsername, this.msgList[toUsername]); // 这样赋值才能实时响应变化
+      this.$set(this.msgList, toUsername, this.msgList[toUsername]) // 这样赋值才能实时响应变化
 
       // 触发服务端事件
       this.socket.emit('say', {
