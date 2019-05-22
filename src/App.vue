@@ -10,8 +10,14 @@
       <router-link to="/about">About</router-link>
     </div> -->
       <router-view/>
-      <!-- <el-footer>
-      </el-footer> -->
+      <el-footer>
+        <el-row>
+          {{$t('language')}}:
+          <el-button :type="$i18n.locale == 'en' ? 'primary' : ''" round>En</el-button>
+          <el-button :type="$i18n.locale == 'zh_cn' ? 'primary' : ''" round>?</el-button>
+          <el-button :type="$i18n.locale == 'ja' ? 'primary' : ''" round>?</el-button>
+        </el-row>
+      </el-footer>
     </el-container>
   </div>
 </template>
