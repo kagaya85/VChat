@@ -4,19 +4,18 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <el-container>
       <el-menu class="user-list" default-active="0" @select="selected">
-        <el-menu-item index="0">{{ $t("chatRoom") }}</el-menu-item>
         <el-menu-item
-          v-for="(user, index) in usrList"
+          v-for="(user, index) in userList"
           :index="user.id.toString()"
-          :key="index + 1"
-          >{{ user.name }}</el-menu-item
+          :key="index"
+          >{{ user.showname }}</el-menu-item
         >
       </el-menu>
       <el-container>
         <el-header>
           <h1>
             {{
-              selectIndex != 0 ? usrList[selectIndex - 1].name : $t("chatRoom")
+              selectIndex != 0 ? userList[selectIndex - 1].name : $t("chatRoom")
             }}
           </h1>
         </el-header>
@@ -30,7 +29,7 @@
           >
             <div class="msg-win">
               <Message
-                v-for="(msg, index) in msgList[selectIndex]"
+                v-for="(msg, index) in msgList[userList[selectIndex].username]"
                 :key="index"
                 :isMe="msg.username == $store.state.username"
                 :username="msg.username"
@@ -65,17 +64,22 @@ export default {
   },
   data() {
     return {
-      msgList: [
-        [
-          { username: "kagaya", content: "hi this is me" },
-          { username: "Tim", content: "hi this is Tim" },
-          { username: "Jack", content: "hi this is Jack" }
-        ]
-      ],
-      usrList: [
-        { name: "Jack", id: 1 },
-        { name: "Mike", id: 2 },
-        { name: "Cindy", id: 3 }
+      msgList: {
+        'chatRoom': [
+            { username: "kagaya", content: "hi this is me" },
+            { username: "Tim", content: "hi this is Tim" },
+            { username: "Jack", content: "hi this is Jack" }
+          ]
+      },
+      userList: [
+        { 
+          showname: this.$t("chatRoom"), 
+          username: 'chatRoom', 
+          uid: '0' 
+        },
+        { showname: "Jack", username: "Jack", uid: '2' },
+        { showname: "Mike", username: "Mike", uid: '3' },
+        { showname: "Cindy", username: "Cindy", uid: '4' }
       ],
       selectIndex: 0,
       socket: null
@@ -85,21 +89,49 @@ export default {
     // 这里连接websocket
     this.socket = io.connect(config.server);
 
+    socket.on('connection', () => {
+      this.$message({
+        message: this.$t('connected'),
+        type: 'success'
+      })
+    })
     // 连接失败
-    socket.on("connect_error", function() {
-      console.log("Connection failed");
+    socket.on("connect_error", () => {
+      console.log("Connection failed")
     })
     // 重连失败
-    socket.on("reconnect_failed", function() {
-      console.log("Reconnection failed");
+    socket.on("reconnect_failed", () => {
+      console.log("Reconnection failed")
     })
     // 用户上线
-    socket.on('online', function (data) {
-
+    socket.on('online', (data) => {
+      this.$message(this.$t('hi') + ', ' + data.username + ' ' + this.$t('isOnline') + '!')
+      this.userList.push({showname: data.username, username: data.username, uid: data.uid})
     })
     // 用户下线
-    socket.on('offline', function (data) {
+    socket.on('offline', (data) => {
+      this.$message(this.$t('hi') + ', ' + data.username + ' ' + this.$t('isOffline') + '!')
+      for (var i = 0; i < this.userList.length; i++) {
+        if (this.userList[i].username == data.username && this.userList[i].uid == data.uid){
+          this.userList.splice(i, 1)  // remove user from list
+        
+          delete this.msgList[this.userList[i].username]  // remove message list
+        
+          if(this.selectIndex == i)
+            this.selectIndex = 0
 
+          break
+        }
+      }
+    })
+    // 发言事件
+    socket.on('say', (data) => {
+      if(!this.msgList[data.username]) {
+        this.msgList[data.username] = []
+      }
+
+      this.msgList[data.username].push({username: data.username, content: data.content})
+      this.$set(this.msgList, data.username, this.msgList[data.username]); // 这样赋值才能实时响应变化
     })
   },
   beforeDestroy: function() {
@@ -108,13 +140,14 @@ export default {
   },
   methods: {
     sendMsg: function(message) {
-      if (this.msgList[this.selectIndex] == null)
-        this.msgList[this.selectIndex] = [];
-      this.msgList[this.selectIndex].push({
+      let toUsername = this.userList[this.selectIndex].username
+      if (!this.msgList[toUsername])
+        this.msgList[toUsername] = [];
+      this.msgList[toUsername].push({
         username: this.$store.state.username,
         content: message
       });
-      this.$set(this.msgList, this.selectIndex, this.msgList[this.selectIndex]); // 这样赋值才能实时响应变化
+      this.$set(this.msgList, toUsername, this.msgList[toUsername]); // 这样赋值才能实时响应变化
     },
     selected: function(index) {
       this.selectIndex = index;

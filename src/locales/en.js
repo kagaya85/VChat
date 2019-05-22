@@ -12,6 +12,11 @@ const en = {
   messagePlaceholder: "Please input something...",
   chatRoom: "Chat Room",
   welcome: "Welcome",
+  
+  hi: "Hi",
+  connected: "Connect to server",
+  isOnline: "is online now",
+  isOffline: "is offline now",
   ...enLocale
 }
 
