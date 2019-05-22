@@ -14,8 +14,8 @@
         <el-row>
           {{$t('language')}}:
           <el-button :type="$i18n.locale == 'en' ? 'primary' : ''" round>En</el-button>
-          <el-button :type="$i18n.locale == 'zh_cn' ? 'primary' : ''" round>?</el-button>
-          <el-button :type="$i18n.locale == 'ja' ? 'primary' : ''" round>?</el-button>
+          <el-button :type="$i18n.locale == 'zh_cn' ? 'primary' : ''" round>中</el-button>
+          <el-button :type="$i18n.locale == 'ja' ? 'primary' : ''" round>日</el-button>
         </el-row>
       </el-footer>
     </el-container>

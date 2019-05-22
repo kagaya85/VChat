@@ -72,10 +72,10 @@ export default {
           ]
       },
       userList: [
-        { 
-          showname: this.$t("chatRoom"), 
-          username: 'chatRoom', 
-          uid: '0' 
+        {
+          showname: this.$t("chatRoom"),
+          username: 'chatRoom',
+          uid: '0'
         },
         { showname: "Jack", username: "Jack", uid: '2' },
         { showname: "Mike", username: "Mike", uid: '3' },
@@ -89,34 +89,34 @@ export default {
     // 这里连接websocket
     this.socket = io.connect(config.server);
 
-    socket.on('connection', () => {
+    this.socket.on('connection', () => {
       this.$message({
         message: this.$t('connected'),
         type: 'success'
       })
     })
     // 连接失败
-    socket.on("connect_error", () => {
+    this.socket.on("connect_error", () => {
       console.log("Connection failed")
     })
     // 重连失败
-    socket.on("reconnect_failed", () => {
+    this.socket.on("reconnect_failed", () => {
       console.log("Reconnection failed")
     })
     // 用户上线
-    socket.on('online', (data) => {
+    this.socket.on('online', (data) => {
       this.$message(this.$t('hi') + ', ' + data.username + ' ' + this.$t('isOnline') + '!')
       this.userList.push({showname: data.username, username: data.username, uid: data.uid})
     })
     // 用户下线
-    socket.on('offline', (data) => {
+    this.socket.on('offline', (data) => {
       this.$message(this.$t('hi') + ', ' + data.username + ' ' + this.$t('isOffline') + '!')
       for (var i = 0; i < this.userList.length; i++) {
         if (this.userList[i].username == data.username && this.userList[i].uid == data.uid){
           this.userList.splice(i, 1)  // remove user from list
-        
+
           delete this.msgList[this.userList[i].username]  // remove message list
-        
+
           if(this.selectIndex == i)
             this.selectIndex = 0
 
@@ -125,7 +125,7 @@ export default {
       }
     })
     // 发言事件
-    socket.on('say', (data) => {
+    this.socket.on('say', (data) => {
       if(!this.msgList[data.username]) {
         this.msgList[data.username] = []
       }
