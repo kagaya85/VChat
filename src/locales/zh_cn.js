@@ -15,6 +15,7 @@ const zh_cn = {
 
   hi: "嘿",
   connected: "已连接到服务器",
+  connect_error: "与服务器断开连接",
   isOnline: "上线了",
   isOffline: "下线了",
   ...cnLocale

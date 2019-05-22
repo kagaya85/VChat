@@ -15,6 +15,7 @@ const en = {
 
   hi: "Hi",
   connected: "Connect to server",
+  connect_error: "Connect error",
   isOnline: "is online now",
   isOffline: "is offline now",
   ...enLocale

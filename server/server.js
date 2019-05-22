@@ -5,7 +5,7 @@ const server = require('http').createServer(app)
 const io = require('socket.io').listen(server)
 const port = 3000
 
-var users = {}
+var onlineList = []
 // var socketList = []
 
 // 测试用
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 server.listen(port, () => console.log(`Server listen on port ${port}!`))
 
-app.post('/login', function(req, res) {
+app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", req.headers.origin)
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie");
   // res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
@@ -37,11 +37,17 @@ app.post('/login', function(req, res) {
   // res.header("X-Powered-By",' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8")
   console.log("get request from " + req.headers.origin)
-  
-  if(req.method == "OPTIONS") { 
+
+  if(req.method == "OPTIONS") {
     res.sendStatus(200) // 让options请求快速返回
   }
   else {
+    next()
+  }
+})
+
+// 登陆处理
+app.post('/login', function(req, res) {
     // 登陆请求处理
     console.log('username:' + req.body.username)
     console.log('password:' + req.body.password)
@@ -57,51 +63,70 @@ app.post('/login', function(req, res) {
     else {
       res.status(404)
     }
-  }
-});
+})
 
+// app.post('/register', function(req, res) {
+//   // 注册请求处理
+//   console.log('username:' + req.body.username)
+//   console.log('password:' + req.body.password)
+
+// })
+
+// 消息首发处理
 io.sockets.on('connection', function (socket) {
+  // console.log('connected')
   //有人上线
   socket.on('online', function (data) {
+    console.log('[Online] ' + data.username)
     //将上线的用户名存储为 socket 对象的属性，以区分每个 socket 对象，方便后面使用
-    socket.name = data.username;
+    socket.username = data.username;
     socket.uid = data.uid;
+
+    // 发送当前在线用户
+    socket.emit('user-list', onlineList)
+
     //users 对象中不存在该用户名则插入该用户名
-    if (!users[data.username]) {
-      users[data.username] = data.username;
-    }
-    //向所有用户广播该用户上线信息
-    io.sockets.emit('online', {username: data.username, uid: data.uid});
-  });
+    onlineList.push({
+      username: data.username,
+      uid: data.uid
+    })
+
+    //向其他用户广播该用户上线信息
+    socket.broadcast.emit('online', {username: data.username, uid: data.uid});
+  })
 
   //有人发话
   socket.on('say', function (data) {
+    console.log('[Say] ' + data.from, data.to, data.content)
     if (data.to == 'chatRoom') {
       // 聊天室
-      socket.broadcast.emit('say', data);
+      socket.broadcast.emit('say', data)
     } else {
       //向特定用户发送该用户发话信息
-      //clients 为存储所有连接对象的数组
-      var clients = io.sockets.clients();
-      //遍历找到该用户
-      clients.forEach(function (client) {
-        if (client.name == data.to) {
+      for(let socket in io.sockets.connected) {
+        //遍历找到该用户
+        if(socket.username == data.to) {
           //触发该用户客户端的 say 事件
-          client.emit('say', data);
+          console.log('[Say] send to ', data.to, data.content)
+          socket.emit('say', data)
         }
-      });
+      }
     }
-  });
+  })
 
   //有人下线(断开连接)
   socket.on('disconnect', function() {
-    //若 users 对象中保存了该用户名
-    if (users[socket.name]) {
-      //从 users 对象中删除该用户名
-      delete users[socket.name];
-      //向其他所有用户广播该用户下线信息
-      socket.broadcast.emit('offline', {username: socket.name, uid: socket.uid});
-    }
-  });
+    console.log('[Offline] ' + socket.name)
 
+    for(let i = 0; i < onlineList.length; i++) {
+      if (socket.username == onlineList[i].username && socket.uid == onlineList[i].uid) {
+        onlineList.splice(i, 1)
+        break;
+      }
+    }
+
+    //向其他所有用户广播该用户下线信息
+    socket.broadcast.emit('offline', {username: socket.name, uid: socket.uid})
+    console.log(onlineList)
+  })
 })

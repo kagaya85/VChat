@@ -6,17 +6,15 @@
       <el-menu class="user-list" default-active="0" @select="selected">
         <el-menu-item
           v-for="(user, index) in userList"
-          :index="user.id.toString()"
+          :index="index.toString()"
           :key="index"
-          >{{ user.showname }}</el-menu-item
+          >{{ index != 0 ? user.username : $t("chatRoom")}}</el-menu-item
         >
       </el-menu>
       <el-container>
         <el-header>
           <h1>
-            {{
-              selectIndex != 0 ? userList[selectIndex - 1].name : $t("chatRoom")
-            }}
+            {{selectIndex != 0 ? userList[selectIndex].username : $t("chatRoom")}}
           </h1>
         </el-header>
         <el-main>
@@ -66,20 +64,16 @@ export default {
     return {
       msgList: {
         'chatRoom': [
-            { username: "kagaya", content: "hi this is me" },
-            { username: "Tim", content: "hi this is Tim" },
-            { username: "Jack", content: "hi this is Jack" }
+            // { username: "kagaya", content: "hi this is me" },
+            // { username: "Tim", content: "hi this is Tim" },
+            // { username: "Jack", content: "hi this is Jack" }
           ]
       },
       userList: [
         {
-          showname: this.$t("chatRoom"),
           username: 'chatRoom',
           uid: '0'
         },
-        { showname: "Jack", username: "Jack", uid: '2' },
-        { showname: "Mike", username: "Mike", uid: '3' },
-        { showname: "Cindy", username: "Cindy", uid: '4' }
       ],
       selectIndex: 0,
       socket: null
@@ -89,15 +83,31 @@ export default {
     // 这里连接websocket
     this.socket = io.connect(config.server);
 
-    this.socket.on('connection', () => {
+    this.socket.on('connect', () => {
       this.$message({
         message: this.$t('connected'),
         type: 'success'
       })
+      // 发送online事件
+      this.socket.emit('online',{
+        username: this.$store.state.username,
+        uid: this.$store.state.uid,
+        token: this.$store.state.token
+      })
     })
+
+    // 更新用户列表
+    this.socket.on('user-list', (data) => {
+      this.userList = this.userList.concat(data)
+    })
+
     // 连接失败
     this.socket.on("connect_error", () => {
       console.log("Connection failed")
+      this.$message({
+        message: this.$t('connect_error'),
+        type: 'error'
+      })
     })
     // 重连失败
     this.socket.on("reconnect_failed", () => {
@@ -106,7 +116,9 @@ export default {
     // 用户上线
     this.socket.on('online', (data) => {
       this.$message(this.$t('hi') + ', ' + data.username + ' ' + this.$t('isOnline') + '!')
-      this.userList.push({showname: data.username, username: data.username, uid: data.uid})
+      if(data.username != this.$store.state.username){
+        this.userList.push({username: data.username, uid: data.uid})
+      }
     })
     // 用户下线
     this.socket.on('offline', (data) => {
@@ -126,28 +138,45 @@ export default {
     })
     // 发言事件
     this.socket.on('say', (data) => {
-      if(!this.msgList[data.username]) {
-        this.msgList[data.username] = []
+      console.log('Get message from ' + data.from)
+      let username
+      if(data.to == 'chatRoom') {
+        username = 'chatRoom'
+      }
+      else if(!this.msgList[data.from]) {
+        username = data.from
+        this.msgList[username] = []
       }
 
-      this.msgList[data.username].push({username: data.username, content: data.content})
-      this.$set(this.msgList, data.username, this.msgList[data.username]); // 这样赋值才能实时响应变化
+      this.msgList[username].push({username: data.from, content: data.content})
+      this.$set(this.msgList, data.username, this.msgList[username]); // 这样赋值才能实时响应变化
     })
   },
   beforeDestroy: function() {
     // 断开连接
-    this.socket.close();
+    this.socket.close()
   },
   methods: {
     sendMsg: function(message) {
       let toUsername = this.userList[this.selectIndex].username
-      if (!this.msgList[toUsername])
-        this.msgList[toUsername] = [];
+      console.log('Send message to ' + toUsername)
+      if (!this.msgList[toUsername]) {
+        this.msgList[toUsername] = []
+      }
+
       this.msgList[toUsername].push({
         username: this.$store.state.username,
         content: message
       });
+
       this.$set(this.msgList, toUsername, this.msgList[toUsername]); // 这样赋值才能实时响应变化
+
+      // 触发服务端事件
+      this.socket.emit('say', {
+        from: this.$store.state.username,
+        to: toUsername,
+        content: message
+      })
     },
     selected: function(index) {
       this.selectIndex = index;
@@ -173,6 +202,8 @@ export default {
 }
 
 .el-menu-item {
-  padding-right: 100px;
+  width: 180px;
+  overflow: hidden;
+  /* padding-right: 100px; */
 }
 </style>

@@ -11,11 +11,11 @@
     </div> -->
       <router-view/>
       <el-footer>
-        <el-row>
+        <el-row class="locale-switch">
           {{$t('language')}}:
-          <el-button :type="$i18n.locale == 'en' ? 'primary' : ''" round>En</el-button>
-          <el-button :type="$i18n.locale == 'zh_cn' ? 'primary' : ''" round>中</el-button>
-          <el-button :type="$i18n.locale == 'ja' ? 'primary' : ''" round>日</el-button>
+          <el-button @click="changeLocale($event)" value="en" :type="$i18n.locale == 'en' ? 'primary' : ''" round>En</el-button>
+          <el-button @click="changeLocale($event)" value="zh_cn" :type="$i18n.locale == 'zh_cn' ? 'primary' : ''" round>中</el-button>
+          <el-button @click="changeLocale($event)" value="ja" :type="$i18n.locale == 'ja' ? 'primary' : ''" round>日</el-button>
         </el-row>
       </el-footer>
     </el-container>
@@ -32,7 +32,12 @@ export default {
     username: function() {
       return this.$store.state.username;
     }
-  }
+  },
+  methods: {
+    changeLocale: function(event) {
+      this.$i18n.locale = event.currentTarget.value;
+    }
+  },
 }
 </script>
 
@@ -43,6 +48,10 @@ export default {
 
 .app-header {
   margin-bottom: 10px;
+}
+
+.locale-switch {
+  text-align: right;
 }
 
 #app {

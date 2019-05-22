@@ -5,8 +5,8 @@ const ja = {
   hello: "こんにちは",
   login: "ログイン",
   register: "登録",
-  plsInputUsername: "ユーザー名を入力してください",
-  plsInputPassword: "パスワードを入力してください",
+  plsInputUsername: "ユーザー名を入力",
+  plsInputPassword: "パスワードを入力",
 
   send: "送る",
   messagePlaceholder: "何が言いたいですか...",
@@ -15,6 +15,7 @@ const ja = {
 
   hi: "へ",
   connected: "Connect to server",
+  connect_error: "Connect error",
   isOnline: "is online now",
   isOffline: "is offline now",
   ...jaLocale
