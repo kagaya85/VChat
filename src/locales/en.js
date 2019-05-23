@@ -7,6 +7,8 @@ const en = {
   register: "Register",
   plsInputUsername: "Please input username",
   plsInputPassword: "Please input password",
+  plsRepeatPassword: "Please input password again",
+  confirm: "Confirm",
 
   send: "Send",
   messagePlaceholder: "Please input something...",

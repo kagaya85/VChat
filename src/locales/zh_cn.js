@@ -7,6 +7,8 @@ const zh_cn = {
   register: "注册",
   plsInputUsername: "请输入用户名",
   plsInputPassword: "请输入密码",
+  plsRepeatPassword: "请再次输入密码",
+  confirm: "确认",
 
   send: "发送",
   messagePlaceholder: "说点什么吧...",

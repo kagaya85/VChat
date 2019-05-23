@@ -7,6 +7,8 @@ const ja = {
   register: "登録",
   plsInputUsername: "ユーザー名を入力",
   plsInputPassword: "パスワードを入力",
+  plsRepeatPassword: "パスワードを入力",
+  confirm: "確認",
 
   send: "送る",
   messagePlaceholder: "何が言いたいですか...",

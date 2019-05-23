@@ -23,6 +23,8 @@ var userList = {
     password: '123'
   },
 }
+
+
 // 使用中间件
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -45,6 +47,8 @@ app.all('*', function(req, res, next) {
     next()
   }
 })
+
+
 
 // 登陆处理
 app.post('/login', function(req, res) {
@@ -126,7 +130,7 @@ io.sockets.on('connection', function (socket) {
     }
 
     //向其他所有用户广播该用户下线信息
-    socket.broadcast.emit('offline', {username: socket.name, uid: socket.uid})
+    socket.broadcast.emit('offline', {username: socket.username, uid: socket.uid})
     console.log(onlineList)
   })
 })
