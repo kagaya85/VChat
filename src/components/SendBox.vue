@@ -4,7 +4,7 @@
       type="textarea"
       :rows="5"
       :placeholder="$t('messagePlaceholder')"
-      v-model.trim="textarea"
+      v-model="textarea"
       @keyup.enter.native="sendClicked"
       maxlength="500"
       show-word-limit

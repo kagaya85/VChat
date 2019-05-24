@@ -8,7 +8,13 @@ const ja = {
   plsInputUsername: "ユーザー名を入力",
   plsInputPassword: "パスワードを入力",
   plsRepeatPassword: "パスワードを入力",
+  passwordNotSame: "パスワードが違います",
   confirm: "確認",
+  plsInputCode: "コードを入力",
+  InputCodeErr: "コードエラー",
+  changeCode: "コードを変える",
+  registerOK: "登録成功します",
+  registerFailed: "登録失敗した",
 
   send: "送る",
   messagePlaceholder: "何が言いたいですか...",

@@ -8,7 +8,13 @@ const zh_cn = {
   plsInputUsername: "请输入用户名",
   plsInputPassword: "请输入密码",
   plsRepeatPassword: "请再次输入密码",
+  passwordNotSame: "密码输入不相同",
   confirm: "确认",
+  plsInputCode: "请输入验证码",
+  InputCodeErr: "验证码错误",
+  changeCode: "看不清，换一张",
+  registerOK: "注册成功",
+  registerFailed: "注册失败",
 
   send: "发送",
   messagePlaceholder: "说点什么吧...",
