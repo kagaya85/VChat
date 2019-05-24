@@ -143,8 +143,10 @@ export default {
       if(data.to == 'chatRoom') {
         username = 'chatRoom'
       }
-      else if(!this.msgList[data.from]) {
+      else{
         username = data.from
+      }
+      if(!this.msgList[data.from]) {
         this.$set(this.msgList, username, [])
       }
 
@@ -159,7 +161,7 @@ export default {
   methods: {
     sendMsg: function(message) {
       let toUsername = this.userList[this.selectIndex].username
-      console.log('Send message to ' + toUsername)
+      console.log('Send message', this.$store.state.username, toUsername)
       if (!this.msgList[toUsername]) {
         this.$set(this.msgList, toUsername, [])
       }

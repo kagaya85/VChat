@@ -105,7 +105,7 @@ io.sockets.on('connection', function (socket) {
 
   //有人发话
   socket.on('say', function (data) {
-    console.log('[Say] ' + data.from, data.to, data.content)
+    console.log('[Say] ', data.from, data.to, data.content)
     if (data.to == 'chatRoom') {
       // 聊天室
       socket.broadcast.emit('say', data)
@@ -115,7 +115,7 @@ io.sockets.on('connection', function (socket) {
         //遍历找到该用户
         if (io.sockets.connected[key].username == data.to) {
           //触发该用户客户端的 say 事件
-          console.log('[Say] send to ', data.to, data.content)
+          console.log('[Say] ', data.from, data.to, data.content)
           io.sockets.connected[key].emit('say', data)
         }
       }
