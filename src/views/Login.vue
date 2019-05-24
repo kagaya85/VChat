@@ -114,8 +114,8 @@ export default {
           this.$store.commit('login', res.data)
           // 消息提示
           this.$message({
-          message: this.$t('welcome') + '!',
-          type: "success"
+            message: this.$t('welcome') + '!',
+            type: "success"
           });
           // 1.5s后跳转跳转页面
           wait(1500).then(() => {
@@ -124,6 +124,10 @@ export default {
         }
         else {  // 404
           // 登陆失败
+          this.$message({
+            message: this.$t('loginFailed') + '!',
+            type: "error"
+          })
         }
       })
       .catch(err => {

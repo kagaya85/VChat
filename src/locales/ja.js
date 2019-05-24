@@ -14,6 +14,7 @@ const ja = {
   messagePlaceholder: "何が言いたいですか...",
   chatRoom: "チャットルーム",
   welcome: "ようこそ",
+  loginFailed: "ログインエラー",
 
   hi: "へ",
   connected: "Connect to server",

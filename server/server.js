@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const mongo = require('./mongo')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io').listen(server)
@@ -57,16 +58,18 @@ app.post('/login', function(req, res) {
     console.log('password:' + req.body.password)
 
     // 用户名密码校验
-    if(userList.hasOwnProperty(req.body.username) && userList[req.body.username].password == req.body.password) {
-      res.status(200).json({
-        username: req.body.username,
-        uid: userList[req.body.username].uid,
-        token: 'abcde'
-      })
-    }
-    else {
-      res.status(404)
-    }
+    mongo.checkUser(req.body).then((id) => {
+      if(id){
+        res.status(200).json({
+          username: req.body.username,
+          uid: id,
+          token: 'abcde'
+        })
+      }
+      else {
+        res.status(404)
+      }
+    })
 })
 
 // app.post('/register', function(req, res) {

@@ -14,6 +14,7 @@ const zh_cn = {
   messagePlaceholder: "说点什么吧...",
   chatRoom: "聊天室",
   welcome: "欢迎",
+  loginFailed: "登陆错误，请检查账户密码",
 
   hi: "嘿",
   connected: "已连接到服务器",

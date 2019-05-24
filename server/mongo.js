@@ -5,25 +5,61 @@ function __connectDB() {
   return mongo.connect(config.dburl, { useNewUrlParser: true })
 }
 
-var users = [
-  {
-    username: 'Kagaya',
-    password: "970805"
-  },
-  {
-    username: 'Tim',
-    password: "123456"
-  },
-  {
-    username: 'Hibiki',
-    password: "123456"
-  }
-]
+/**
+ * 向数据库插入一个用户
+ * @param {Object} user
+ * @param {String} user.username
+ * @param {String} user.password
+ */
 
-__connectDB().then((client) => {
-  var db = client.db('vchat')
-  db.collection("users").insertMany(users, function(err, res) {
-    if (err) throw err;
-    console.log("插入的文档数量为: " + res.insertedCount)
+function insertUser(user) {
+  if(!user.username || !user.password) {
+    console.log('insert data error')
+    return
+  }
+
+  __connectDB().then((client) => {
+    var db = client.db('vchat')
+    db.collection("users").insertOne(user, function(err, res) {
+      if (err) {
+        console.log(err)
+      }
+      console.log("insert number: " + res.insertedCount)
+    })
+  }).catch(err => console.log(err))
+}
+
+/**
+ *
+ * @param {Object} user
+ * @param {String} user.username
+ * @param {String} user.password
+ */
+function checkUser(user) {
+  if(!user.username || !user.password) {
+    console.log('user data error')
+    return
+  }
+
+  return new Promise ( function(resolve) {
+    __connectDB().then((client) => {
+      var db = client.db('vchat')
+      db.collection("users").findOne(
+        { username: user.username, password: user.password },
+        { projection: {_id:1} },
+        function(err, res) {
+          if (err) {
+            console.log(err)
+          }
+          console.log('res: ', res)
+          resolve(res)
+        }
+      )
+    }).catch(err => console.log(err))
   })
-}).catch(err => console.log(err))
+}
+
+module.exports = {
+  insertUser,
+  checkUser
+}

@@ -14,6 +14,7 @@ const en = {
   messagePlaceholder: "Please input something...",
   chatRoom: "Chat Room",
   welcome: "Welcome",
+  loginFailed: "Login failed, please check again",
 
   hi: "Hi",
   connected: "Connect to server",
