@@ -146,7 +146,7 @@ export default {
       else{
         username = data.from
       }
-      if(!this.msgList[data.from]) {
+      if(!this.msgList[username]) {
         this.$set(this.msgList, username, [])
       }
 
