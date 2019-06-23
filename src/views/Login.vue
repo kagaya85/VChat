@@ -87,6 +87,12 @@ export default {
     };
   },
   components: {},
+  mounted: function() {
+    this.$message({
+      message: "这是您第1次访问VChat!",
+      type: "info"
+    });
+  },
   methods: {
     login: function() {
       if (this.username == "") {
