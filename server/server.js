@@ -8,7 +8,8 @@ const port = 3000
 
 var onlineList = []
 // var socketList = []
-
+// test db
+mongo.testDBConnection()
 
 // 使用中间件
 app.use(bodyParser.json())

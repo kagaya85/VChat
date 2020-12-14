@@ -7,6 +7,14 @@ function __connectDB() {
   })
 }
 
+function testDBConnection() {
+  __connectDB()
+  .then(client => {
+    var db = client.db('vchat')
+    console.log("Mongodb connect OK!")})
+  .catch(err => console.log(err))
+}
+
 /**
  * 向数据库插入一个用户
  * @param {Object} user
@@ -72,5 +80,6 @@ function checkUser(user) {
 
 module.exports = {
   insertUser,
-  checkUser
+  checkUser,
+  testDBConnection
 }
